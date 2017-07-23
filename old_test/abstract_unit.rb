@@ -7,13 +7,14 @@ require 'bundler'
 Bundler.setup
 Bundler.require
 
-require "minitest/autorun"
+require 'test/unit'
 require 'active_support'
 require 'action_controller'
 require 'action_view'
 require 'action_view/testing/resolvers'
 
-require 'rewriter/rewrite_rjs'
+require 'jquery-rjs/on_load_action_controller'
+require 'jquery-rjs/on_load_action_view'
 
 FIXTURE_LOAD_PATH = File.join(File.dirname(__FILE__), 'fixtures')
 FIXTURES = Pathname.new(FIXTURE_LOAD_PATH)
