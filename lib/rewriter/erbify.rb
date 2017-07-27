@@ -14,6 +14,9 @@ module Rewriter
         when :redirect_to
           rewrite_redirect_to(receiver_node, method_name, *arg_nodes)
 
+        when :[]
+          rewrite_square_bracket(receiver_node, method_name, *arg_nodes)
+
         else
           # All others such as :
           # page.alert
@@ -28,11 +31,11 @@ module Rewriter
         end
       end
 
-      # page[:html_id]
-      rewrite_square_bracket(receiver_node) if receiver_node.to_a.first.to_a.last == :page && receiver_node.to_a[1] == :[]
-      # page[:html_id].replace_html or page[:html_id].replace
-      rewrite_square_replace(receiver_node, method_name, *arg_nodes) if receiver_node.to_a.first.to_a.last == :page && receiver_node.to_a[1] == :[] &&
-        [:replace, :replace_html].include?(method_name)
+      # page[:html_id].some_method
+      if receiver_node.to_a.first.to_a.last == :page && receiver_node.to_a[1] == :[]
+        rewrite_square_bracket(*receiver_node.to_a)
+        rewrite_square_replace(receiver_node, method_name, *arg_nodes) if [:replace, :replace_html].include?(method_name)
+      end
     end
 
     def rewrite_all_args(receiver_node, method_name, *arg_nodes)
@@ -58,8 +61,7 @@ module Rewriter
     end
 
     # e.g. page["sgfg"] or page["wat_#{@id}"]
-    def rewrite_square_bracket(node)
-      receiver_node, method_name, *arg_nodes = *node
+    def rewrite_square_bracket(receiver_node, method_name, *arg_nodes)
       rewrite_to_erb_unless_static(arg_nodes.shift)
     end
 

@@ -92,8 +92,6 @@ end
 
 
 class JavaScriptGeneratorTest < JqueryHelperBaseTest
-  #tests ActionView::Helpers::JqueryUiHelper.send(:include, ActionView::Helpers::JqueryHelper)
-
   def setup
     super
     @generator = create_generator
@@ -217,11 +215,12 @@ $("#baz").html("\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
 
   def test_element_access_on_variable
     assert_equal %($("#<%= 'hello' + @var %>");), generate_js(%Q{ page['hello' + @var] })
+    assert_equal %($("#<%= 'hello' + @var %>").hide();), generate_js(%Q{ page['hello' + @var].hide })
   end
 
   def test_element_access_on_records
-    assert_equal %($("#bunny_5");),   generate_js(%Q{ page[Bunny.new(:id => 5)] })
-    assert_equal %($("#new_bunny");), generate_js(%Q{ page[Bunny.new] })
+    assert_equal %($("#<%= Bunny.new(:id => 5) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
+    assert_equal %($("#<%= Bunny.new %>");), generate_js(%Q{ page[Bunny.new] })
   end
 
 
