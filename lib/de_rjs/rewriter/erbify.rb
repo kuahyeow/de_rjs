@@ -64,16 +64,8 @@ module DeRjs
       end
 
       # e.g. page["sgfg"] or page["wat_#{@id}"]
-      #
-      # But this will raise when it encounters e.g. page[@var] or page[Bunny.new]
-      # While this is NOT accurate, throwing an error seems better than trying to evaluating
-      # a turing complete statement, and causing subtle failures downstream
       def rewrite_square_bracket(receiver_node, method_name, *arg_nodes)
-        unless [:str, :sym, :dstr].include?(arg_nodes.first.type)
-          raise MustTranslateManually, "Unable to compute type of expression statically:#{arg_nodes.first.inspect}\n -" \
-            "`def id[]` supports String, Symbol, NilClass or something that `dom_id` can understand"
-        end
-        rewrite_to_erb_unless_static(arg_nodes.shift)
+        rewrite_dom_id(arg_nodes.shift)
       end
 
       # *options_for_render
@@ -86,6 +78,17 @@ module DeRjs
         return if [:str, :sym].include?(id_arg.type)
         insert_before id_arg.loc.expression, "%q{<%= "
         insert_after  id_arg.loc.expression, " %>}"
+      end
+
+      def rewrite_dom_id(id_arg)
+        return if [:str, :sym].include?(id_arg.type)
+        if id_arg.type == :dstr
+          insert_before id_arg.loc.expression, "%q{<%= "
+          insert_after  id_arg.loc.expression, " %>}"
+        else
+          insert_before id_arg.loc.expression, "%q{<%= dom_id("
+          insert_after  id_arg.loc.expression, ") %>}"
+        end
       end
 
       def rewrite_options_for_render(arg_nodes)

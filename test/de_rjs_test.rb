@@ -151,21 +151,18 @@ jQuery("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
   end
 
   def test_element_access_on_variable
-    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %(jQuery("#<%= 'hello' + @var %>");), generate_js(%Q{ page['hello' + @var] })
-    end
-    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %(jQuery("#<%= 'hello' + @var %>").hide();), generate_js(%Q{ page['hello' + @var].hide })
-    end
+    assert_equal %(jQuery("#<%= dom_id(@var) %>");), generate_js(%Q{ page[@var] })
+    assert_equal %(jQuery("#<%= dom_id(@var) %>").hide();), generate_js(%Q{ page[@var].hide })
+  end
+
+  def test_element_access_on_interpolated_string
+    assert_equal %q(jQuery("#<%= "hello#{@var}" %>");), generate_js(%q{ page["hello#{@var}"] })
+    assert_equal %q(jQuery("#<%= "hello#{@var}" %>").hide();), generate_js(%q{page["hello#{@var}"].hide })
   end
 
   def test_element_access_on_records
-    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %(jQuery("#<%= Bunny.new(:id => 5) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
-    end
-    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %(jQuery("#<%= Bunny.new %>");), generate_js(%Q{ page[Bunny.new] })
-    end
+    assert_equal %(jQuery("#<%= dom_id(Bunny.new(:id => 5)) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
+    assert_equal %(jQuery("#<%= dom_id(Bunny.new) %>");), generate_js(%Q{ page[Bunny.new] })
   end
 
 

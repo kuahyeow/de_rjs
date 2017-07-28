@@ -134,7 +134,7 @@ module DeRjs
         when String, Symbol, NilClass
           JavaScriptElementProxy.new(self, id)
         else
-          JavaScriptElementProxy.new(self, ActionController::RecordIdentifier.dom_id(id))
+          JavaScriptElementProxy.new(self, ActionView::RecordIdentifier.dom_id(id))
         end
       end
 
