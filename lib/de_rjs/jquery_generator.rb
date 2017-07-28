@@ -472,6 +472,14 @@ module DeRjs
           element = "this"
         end
 
+        #if ['fadeIn','fadeOut','fadeToggle'].include?(name)
+        #  "$(\"#{jquery_id(element_id)}\").#{name}();"
+        #else
+          "#{JQUERY_VAR}(#{element}).#{jquery_ui_effect(name, js_options)}"
+        #end
+      end
+
+      def jquery_ui_effect(name, js_options)
         if SCRIPTACULOUS_EFFECTS.has_key? name.to_sym
           effect = SCRIPTACULOUS_EFFECTS[name.to_sym]
           name = effect[:method]
@@ -490,13 +498,7 @@ module DeRjs
         end
 
         js_options[:duration] = (js_options[:duration] * 1000).to_i if js_options.has_key? :duration
-
-        #if ['fadeIn','fadeOut','fadeToggle'].include?(name)
-        #  "$(\"#{jquery_id(element_id)}\").#{name}();"
-        #else
-          "#{JQUERY_VAR}(#{element}).#{mode || "effect"}(\"#{name}\",#{options_for_javascript(js_options)});"
-        #end
-
+        "#{mode || "effect"}(\"#{name}\",#{options_for_javascript(js_options)})"
       end
 
       def arguments_for_call(arguments, block = nil)
@@ -643,6 +645,10 @@ module DeRjs
 
     def replace(*options_for_render)
       call 'replaceWith', @generator.send(:render, *options_for_render)
+    end
+
+    def visual_effect(name, options = {})
+      append_to_function_chain!(@generator.send(:jquery_ui_effect, name, options))
     end
 
     def reload(options_for_replace = {})

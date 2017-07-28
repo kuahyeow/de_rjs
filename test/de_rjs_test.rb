@@ -204,6 +204,9 @@ jQuery("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
   def test_visual_effect
     assert_equal %(jQuery(\"#blah\").effect(\"puff\",{});),
       generate_js(%Q{ page.visual_effect(:puff,'blah') })
+
+    assert_equal %(jQuery(\"#blah\").effect(\"puff\",{});),
+      generate_js(%Q{ page['blah'].visual_effect(:puff) })
   end
 
   def test_visual_effect_toggle

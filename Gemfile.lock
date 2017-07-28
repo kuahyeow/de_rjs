@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    de_rjs (0.2.2)
+    de_rjs (0.3.0)
       parser (>= 2.3.1.2, < 2.5)
       rails (>= 4.2, < 5.1)
 
