@@ -1,10 +1,11 @@
 Gem::Specification.new do |spec|
   spec.name     = 'de_rjs'
-  spec.version  = '0.2.2'
+  spec.version  = '0.3.0'
   spec.summary  = 'de-RJS your application'
   spec.homepage = 'http://github.com/kuahyeow/de_rjs'
   spec.author   = 'Thong Kuah'
   spec.email    = 'kuahyeow@gmail.com'
+  spec.license  = 'MIT'
 
   spec.files = %w(README Rakefile Gemfile) + Dir['bin/*', 'lib/**/*', 'vendor/**/*', 'test/**/*']
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
