@@ -214,13 +214,21 @@ $("#baz").html("\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
   end
 
   def test_element_access_on_variable
-    assert_equal %($("#<%= 'hello' + @var %>");), generate_js(%Q{ page['hello' + @var] })
-    assert_equal %($("#<%= 'hello' + @var %>").hide();), generate_js(%Q{ page['hello' + @var].hide })
+    assert_raises Rewriter::Erbify::MustTranslateManually do
+      assert_equal %($("#<%= 'hello' + @var %>");), generate_js(%Q{ page['hello' + @var] })
+    end
+    assert_raises Rewriter::Erbify::MustTranslateManually do
+      assert_equal %($("#<%= 'hello' + @var %>").hide();), generate_js(%Q{ page['hello' + @var].hide })
+    end
   end
 
   def test_element_access_on_records
-    assert_equal %($("#<%= Bunny.new(:id => 5) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
-    assert_equal %($("#<%= Bunny.new %>");), generate_js(%Q{ page[Bunny.new] })
+    assert_raises Rewriter::Erbify::MustTranslateManually do
+      assert_equal %($("#<%= Bunny.new(:id => 5) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
+    end
+    assert_raises Rewriter::Erbify::MustTranslateManually do
+      assert_equal %($("#<%= Bunny.new %>");), generate_js(%Q{ page[Bunny.new] })
+    end
   end
 
 

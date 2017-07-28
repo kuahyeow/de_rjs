@@ -1,5 +1,7 @@
 module Rewriter
   class Erbify < Parser::Rewriter
+    class MustTranslateManually < StandardError; end
+
     def on_send(node)
       receiver_node, method_name, *arg_nodes = *node
 
@@ -61,7 +63,15 @@ module Rewriter
     end
 
     # e.g. page["sgfg"] or page["wat_#{@id}"]
+    #
+    # But this will raise when it encounters e.g. page[@var] or page[Bunny.new]
+    # While this is NOT accurate, throwing an error seems better than trying to evaluating
+    # a turing complete statement, and causing subtle failures downstream
     def rewrite_square_bracket(receiver_node, method_name, *arg_nodes)
+      unless [:str, :sym, :dstr].include?(arg_nodes.first.type)
+        raise MustTranslateManually, "Unable to compute type of expression statically:#{arg_nodes.first.inspect}\n -" \
+          "`def id[]` supports String, Symbol, NilClass or something that `dom_id` can understand"
+      end
       rewrite_to_erb_unless_static(arg_nodes.shift)
     end
 
