@@ -82,13 +82,18 @@ module DeRjs
 
       def rewrite_dom_id(id_arg)
         return if [:str, :sym].include?(id_arg.type)
-        if id_arg.type == :dstr
+        if id_arg.type == :dstr || is_dom_id_call?(id_arg)
           insert_before id_arg.loc.expression, "%q{<%= "
           insert_after  id_arg.loc.expression, " %>}"
         else
           insert_before id_arg.loc.expression, "%q{<%= dom_id("
           insert_after  id_arg.loc.expression, ") %>}"
         end
+      end
+
+      def is_dom_id_call?(arg_node)
+        array = arg_node.to_a
+        array[0..1] == [nil, :dom_id] #&& array.size == 3
       end
 
       def rewrite_options_for_render(arg_nodes)

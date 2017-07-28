@@ -165,6 +165,12 @@ jQuery("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
     assert_equal %(jQuery("#<%= dom_id(Bunny.new) %>");), generate_js(%Q{ page[Bunny.new] })
   end
 
+  def test_element_access_on_dom_id
+    assert_equal %(jQuery("#<%= dom_id(Bunny.new(:id => 5)) %>");), generate_js(%Q{ page[dom_id(Bunny.new(:id => 5))] })
+    assert_equal %(jQuery("#<%= dom_id(Bunny.new) %>");), generate_js(%Q{ page[dom_id(Bunny.new)] })
+
+    assert_equal %(jQuery("#<%= dom_id(dom_id(Bunny.new) + evil) %>");), generate_js(%Q{ page[dom_id(Bunny.new) + evil] })
+  end
 
   def test_element_proxy_one_deep
     assert_equal %(jQuery("#hello").hide();), generate_js(%Q{ page['hello'].hide })
