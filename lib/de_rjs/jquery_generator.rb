@@ -2,7 +2,7 @@ unless defined? JQUERY_VAR
   JQUERY_VAR = 'jQuery'
 end
 
-module JqueryRjs
+module DeRjs
   # A string that returns itself as its JSON-encoded form.
   class JsonLiteral < String
     def as_json(options = nil) self end #:nodoc:

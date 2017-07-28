@@ -7,7 +7,7 @@ class Bunny < Struct.new(:Bunny, :id)
   def to_key() id ? [id] : nil end
 end
 
-class JqueryHelperBaseTest < Minitest::Test
+class DeRjsBaseTest < Minitest::Test
   protected
   def not_supported
     skip "not supported"
@@ -15,22 +15,18 @@ class JqueryHelperBaseTest < Minitest::Test
 
   def create_generator
     block = Proc.new { |*args| yield(*args) if block_given? }
-    JqueryRjs::JqueryGenerator.new self, &block
-  end
-
-  def rewrite_rjs(source)
-    Rewriter.rewrite_rjs(source)
+    DeRjs::JqueryGenerator.new self, &block
   end
 
   def generate_js(rjs)
-    rewritten_source = Rewriter.rewrite_rjs(rjs)
-    generator = JqueryRjs::JqueryGenerator.new(nil) { eval(rewritten_source)}
+    rewritten_source = DeRjs::Rewriter.rewrite_rjs(rjs)
+    generator = DeRjs::JqueryGenerator.new(nil) { eval(rewritten_source)}
     generator.to_s
   end
 end
 
 
-class JavaScriptGeneratorTest < JqueryHelperBaseTest
+class DeRjsTest < DeRjsBaseTest
   def setup
     super
     @generator = create_generator
@@ -155,19 +151,19 @@ $("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
   end
 
   def test_element_access_on_variable
-    assert_raises Rewriter::Erbify::MustTranslateManually do
+    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
       assert_equal %($("#<%= 'hello' + @var %>");), generate_js(%Q{ page['hello' + @var] })
     end
-    assert_raises Rewriter::Erbify::MustTranslateManually do
+    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
       assert_equal %($("#<%= 'hello' + @var %>").hide();), generate_js(%Q{ page['hello' + @var].hide })
     end
   end
 
   def test_element_access_on_records
-    assert_raises Rewriter::Erbify::MustTranslateManually do
+    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
       assert_equal %($("#<%= Bunny.new(:id => 5) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
     end
-    assert_raises Rewriter::Erbify::MustTranslateManually do
+    assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
       assert_equal %($("#<%= Bunny.new %>");), generate_js(%Q{ page[Bunny.new] })
     end
   end

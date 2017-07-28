@@ -9,7 +9,5 @@ require "minitest/autorun"
 require 'active_support'
 require 'action_controller'
 require 'action_view'
-require 'action_view/testing/resolvers'
 
-require 'jquery_rjs'
-require 'rewriter/rewrite_rjs'
+require 'de_rjs'

@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    jquery-rjs (0.1.1)
-      parser
+    de_rjs (0.2.0)
+      parser (>= 2.3.1.2, < 2.5)
       rails (>= 4.2, < 5.1)
 
 GEM
@@ -67,8 +67,6 @@ GEM
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
-    nokogiri (1.8.0-x86-mingw32)
-      mini_portile2 (~> 2.2.0)
     parser (2.4.0.0)
       ast (~> 2.2)
     rack (2.0.3)
@@ -118,8 +116,8 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  byebug
-  jquery-rjs!
+  byebug (~> 9.0)
+  de_rjs!
 
 BUNDLED WITH
    1.14.6
