@@ -7,87 +7,26 @@ class Bunny < Struct.new(:Bunny, :id)
   def to_key() id ? [id] : nil end
 end
 
-class Author
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-
-  attr_reader :id
-  def to_key() id ? [id] : nil end
-  def save; @id = 1 end
-  def new_record?; @id.nil? end
-  def name
-    @id.nil? ? 'new author' : "author ##{@id}"
-  end
-end
-
-class Article
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-  attr_reader :id
-  attr_reader :author_id
-  def to_key() id ? [id] : nil end
-  def save; @id = 1; @author_id = 1 end
-  def new_record?; @id.nil? end
-  def name
-    @id.nil? ? 'new article' : "article ##{@id}"
-  end
-end
-
-class Author::Nested < Author; end
-
-
-class JqueryHelperBaseTest < ActionView::TestCase
-  attr_accessor :formats, :output_buffer
-
-  def update_details(details)
-    @details = details
-    yield if block_given?
-  end
-
-  def setup
-    super
-    @template = self
-  end
-
-  def url_for(options)
-    if options.is_a?(String)
-      options
-    else
-      url =  "http://www.example.com/"
-      url << options[:action].to_s if options and options[:action]
-      url << "?a=#{options[:a]}" if options && options[:a]
-      url << "&b=#{options[:b]}" if options && options[:a] && options[:b]
-      url
-    end
-  end
-
+class JqueryHelperBaseTest < Minitest::Test
   protected
-    def request_forgery_protection_token
-      nil
-    end
+  def not_supported
+    skip "not supported"
+  end
 
-    def protect_against_forgery?
-      false
-    end
+  def create_generator
+    block = Proc.new { |*args| yield(*args) if block_given? }
+    JqueryRjs::JqueryGenerator.new self, &block
+  end
 
-    def not_supported
-      skip "not supported"
-    end
+  def rewrite_rjs(source)
+    Rewriter.rewrite_rjs(source)
+  end
 
-    def create_generator
-      block = Proc.new { |*args| yield(*args) if block_given? }
-      JqueryRjs::JqueryGenerator.new self, &block
-    end
-
-    def rewrite_rjs(source)
-      Rewriter.rewrite_rjs(source)
-    end
-
-    def generate_js(rjs)
-      rewritten_source = Rewriter.rewrite_rjs(rjs)
-      generator = JqueryRjs::JqueryGenerator.new(nil) { eval(rewritten_source)}
-      generator.to_s
-    end
+  def generate_js(rjs)
+    rewritten_source = Rewriter.rewrite_rjs(rjs)
+    generator = JqueryRjs::JqueryGenerator.new(nil) { eval(rewritten_source)}
+    generator.to_s
+  end
 end
 
 
@@ -196,6 +135,8 @@ class JavaScriptGeneratorTest < JqueryHelperBaseTest
   end
 
   def test_to_s
+    not_supported
+
     @generator.insert_html(:top, 'element', '<p>This is a test</p>')
     @generator.insert_html(:bottom, 'element', '<p>This is a test</p>')
     @generator.remove('foo', 'bar')
