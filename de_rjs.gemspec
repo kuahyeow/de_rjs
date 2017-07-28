@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name     = 'de_rjs'
-  spec.version  = '0.3.0'
+  spec.version  = '0.3.1'
   spec.summary  = 'de-RJS your application'
   spec.homepage = 'http://github.com/kuahyeow/de_rjs'
   spec.author   = 'Thong Kuah'
