@@ -7,8 +7,10 @@ Gem::Specification.new do |spec|
   spec.email    = 'kuahyeow@gmail.com'
 
   spec.files = %w(README Rakefile Gemfile) + Dir['bin/*', 'lib/**/*', 'vendor/**/*', 'test/**/*']
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.require_paths = ['lib']
 
-  spec.add_dependency('rails', '>= 4.2', '< 5.1')
-  spec.add_dependency('parser', '>= 2.3.1.2', '< 2.5')
+  spec.add_runtime_dependency('rails', '>= 4.2', '< 5.1')
+  spec.add_runtime_dependency('parser', '>= 2.3.1.2', '< 2.5')
   spec.add_development_dependency('byebug', '~> 9.0')
 end
