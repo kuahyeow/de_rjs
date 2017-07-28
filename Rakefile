@@ -4,7 +4,6 @@ task :default => :test
 
 Rake::TestTask.new do |t|
   t.libs << 'test'
-  t.test_files = Dir.glob('test/*_test.rb') + Dir.glob('test/{controller,template}/**/*_test.rb')
-  t.warning = true
+  t.pattern = 'test/*_test.rb'
   t.verbose = true
 end

@@ -40,67 +40,67 @@ class DeRjsTest < DeRjsBaseTest
   def _evaluate_assigns_and_ivars() end
 
   def test_insert_html_with_string
-    assert_equal '$("#element").prepend("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");',
+    assert_equal 'jQuery("#element").prepend("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");',
       generate_js(%Q{ page.insert_html(:top, 'element', '<p>This is a test</p>') })
-    assert_equal '$("#element").append("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
+    assert_equal 'jQuery("#element").append("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
       generate_js(%Q{ page.insert_html(:bottom, 'element', '<p>This is a test</p>') })
-    assert_equal '$("#element").before("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
+    assert_equal 'jQuery("#element").before("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
       generate_js(%Q{ page.insert_html(:before, 'element', '<p>This is a test</p>') })
-    assert_equal '$("#element").after("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
+    assert_equal 'jQuery("#element").after("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
       generate_js(%Q{ page.insert_html(:after, 'element', '<p>This is a test</p>') })
   end
 
   def test_replace_html_with_string
-    assert_equal '$("#element").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");',
+    assert_equal 'jQuery("#element").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");',
       generate_js(%Q{ page.replace_html('element', '<p>This is a test</p>') })
   end
 
   def test_replace_element_with_string
-    assert_equal '$("#element").replaceWith("\\u003cdiv id=\"element\"\\u003e\\u003cp\\u003eThis is a test\\u003c/p\\u003e\\u003c/div\\u003e");',
+    assert_equal 'jQuery("#element").replaceWith("\\u003cdiv id=\"element\"\\u003e\\u003cp\\u003eThis is a test\\u003c/p\\u003e\\u003c/div\\u003e");',
       generate_js(%Q{ page.replace('element', '<div id="element"><p>This is a test</p></div>') })
   end
 
   def test_insert_html_with_hash
-    assert_equal '$("#element").prepend("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
+    assert_equal 'jQuery("#element").prepend("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
       generate_js(%Q{ page.insert_html(:top, 'element', :partial => "post", :locals => {:ab => "cd"}) })
   end
 
   def test_replace_html_with_hash
-    assert_equal '$("#element").html("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
+    assert_equal 'jQuery("#element").html("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
       generate_js(%Q{ page.replace_html('element', :partial => "post", :locals => {:ab => "cd"}) })
   end
 
   def test_replace_element_with_hash
-    assert_equal '$("#element").replaceWith("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
+    assert_equal 'jQuery("#element").replaceWith("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
       generate_js(%Q{ page.replace('element', :partial => "post", :locals => {:ab => "cd"}) })
   end
 
 
   def test_remove
-    assert_equal '$("#foo").remove();',
+    assert_equal 'jQuery("#foo").remove();',
       generate_js(%Q{ page.remove('foo') })
-    assert_equal '$("#foo,#bar,#baz").remove();',
+    assert_equal 'jQuery("#foo,#bar,#baz").remove();',
       generate_js(%Q{ page.remove('foo', 'bar', 'baz') })
   end
 
   def test_show
-    assert_equal '$("#foo").show();',
+    assert_equal 'jQuery("#foo").show();',
       generate_js(%Q{ page.show('foo') })
-    assert_equal '$("#foo,#bar,#baz").show();',
+    assert_equal 'jQuery("#foo,#bar,#baz").show();',
       generate_js(%Q{ page.show('foo', 'bar', 'baz') })
   end
 
   def test_hide
-    assert_equal '$("#foo").hide();',
+    assert_equal 'jQuery("#foo").hide();',
       generate_js(%Q{ page.hide('foo') })
-    assert_equal '$("#foo,#bar,#baz").hide();',
+    assert_equal 'jQuery("#foo,#bar,#baz").hide();',
       generate_js(%Q{ page.hide('foo', 'bar', 'baz') })
   end
 
   def test_toggle
-    assert_equal '$("#foo").toggle();',
+    assert_equal 'jQuery("#foo").toggle();',
       generate_js(%Q{ page.toggle('foo') })
-    assert_equal '$("#foo,#bar,#baz").toggle();',
+    assert_equal 'jQuery("#foo,#bar,#baz").toggle();',
       generate_js(%Q{ page.toggle('foo', 'bar', 'baz') })
   end
 
@@ -127,7 +127,7 @@ class DeRjsTest < DeRjsBaseTest
       @generator.hide('foo')
     end
 
-    assert_equal "setTimeout(function() {\n;\n$(\"#foo\").hide();\n}, 20000);", @generator.to_s
+    assert_equal "setTimeout(function() {\n;\njQuery(\"#foo\").hide();\n}, 20000);", @generator.to_s
   end
 
   def test_to_s
@@ -139,77 +139,77 @@ class DeRjsTest < DeRjsBaseTest
     @generator.replace_html('baz', '<p>This is a test</p>')
 
     assert_equal <<-EOS.chomp, @generator.to_s
-$("#element").prepend("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
-$("#element").append("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
-$("#foo,#bar").remove();
-$("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
+jQuery("#element").prepend("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
+jQuery("#element").append("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
+jQuery("#foo,#bar").remove();
+jQuery("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
     EOS
   end
 
   def test_element_access
-    assert_equal %($("#hello");), generate_js(%Q{ page['hello'] })
+    assert_equal %(jQuery("#hello");), generate_js(%Q{ page['hello'] })
   end
 
   def test_element_access_on_variable
     assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %($("#<%= 'hello' + @var %>");), generate_js(%Q{ page['hello' + @var] })
+      assert_equal %(jQuery("#<%= 'hello' + @var %>");), generate_js(%Q{ page['hello' + @var] })
     end
     assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %($("#<%= 'hello' + @var %>").hide();), generate_js(%Q{ page['hello' + @var].hide })
+      assert_equal %(jQuery("#<%= 'hello' + @var %>").hide();), generate_js(%Q{ page['hello' + @var].hide })
     end
   end
 
   def test_element_access_on_records
     assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %($("#<%= Bunny.new(:id => 5) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
+      assert_equal %(jQuery("#<%= Bunny.new(:id => 5) %>");), generate_js(%Q{ page[Bunny.new(:id => 5)] })
     end
     assert_raises DeRjs::Rewriter::Erbify::MustTranslateManually do
-      assert_equal %($("#<%= Bunny.new %>");), generate_js(%Q{ page[Bunny.new] })
+      assert_equal %(jQuery("#<%= Bunny.new %>");), generate_js(%Q{ page[Bunny.new] })
     end
   end
 
 
   def test_element_proxy_one_deep
-    assert_equal %($("#hello").hide();), generate_js(%Q{ page['hello'].hide })
+    assert_equal %(jQuery("#hello").hide();), generate_js(%Q{ page['hello'].hide })
   end
 
   def test_element_proxy_variable_access
-    assert_equal %($("#hello").style;), generate_js(%Q{ page['hello']['style'] })
+    assert_equal %(jQuery("#hello").style;), generate_js(%Q{ page['hello']['style'] })
   end
 
   def test_element_proxy_variable_access_with_assignment
-    assert_equal %($("#hello").style.color = "red";), generate_js(%Q{ page['hello']['style']['color'] = 'red' })
+    assert_equal %(jQuery("#hello").style.color = "red";), generate_js(%Q{ page['hello']['style']['color'] = 'red' })
   end
 
   def test_element_proxy_assignment
-    assert_equal %($("#hello").width = 400;), generate_js(%Q{ page['hello'].width = 400 })
+    assert_equal %(jQuery("#hello").width = 400;), generate_js(%Q{ page['hello'].width = 400 })
   end
 
   def test_element_proxy_two_deep
     @generator['hello'].hide("first").clean_whitespace
-    assert_equal %($("#hello").hide("first").cleanWhitespace();), @generator.to_s
+    assert_equal %(jQuery("#hello").hide("first").cleanWhitespace();), @generator.to_s
   end
 
   def test_select_access
-    assert_equal %($("div.hello");), @generator.select('div.hello')
+    assert_equal %(jQuery("div.hello");), @generator.select('div.hello')
   end
 
   def test_select_proxy_one_deep
-    assert_equal %($("p.welcome b").first().hide();), generate_js(%Q{ page.select('p.welcome b').first.hide })
+    assert_equal %(jQuery("p.welcome b").first().hide();), generate_js(%Q{ page.select('p.welcome b').first.hide })
   end
 
   def test_visual_effect
-    assert_equal %($(\"#blah\").effect(\"puff\",{});),
+    assert_equal %(jQuery(\"#blah\").effect(\"puff\",{});),
       generate_js(%Q{ page.visual_effect(:puff,'blah') })
   end
 
   def test_visual_effect_toggle
-    assert_equal %($(\"#blah\").toggle(\"fade\",{});),
+    assert_equal %(jQuery(\"#blah\").toggle(\"fade\",{});),
       generate_js(%Q{ page.visual_effect(:toggle_appear,'blah') })
   end
 
   def test_visual_effect_with_variable
-    assert_equal %($(\"#<%= "blah" + blah.id %>\").toggle(\"fade\",{});),
+    assert_equal %(jQuery(\"#<%= "blah" + blah.id %>\").toggle(\"fade\",{});),
       generate_js(%Q{ page.visual_effect(:toggle_appear,"blah" + blah.id) })
   end
 
@@ -238,8 +238,8 @@ $("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
     page.select('p.welcome b').last.show()
     })
     assert_equal <<-EOS.strip, js
-$("p.welcome b").first().hide();
-$("p.welcome b").last().show();
+jQuery("p.welcome b").first().hide();
+jQuery("p.welcome b").last().show();
       EOS
   end
 
@@ -253,11 +253,11 @@ $("p.welcome b").last().show();
       @generator.visual_effect :highlight, value
     end
     assert_equal <<-EOS.strip, @generator.to_s
-$("p.welcome b").each(function(value, index) {
+jQuery("p.welcome b").each(function(value, index) {
 value.removeClassName("selected");
 });
-$("p.welcome b").each(function(value, index) {
-$("#value").effect("highlight",{});
+jQuery("p.welcome b").each(function(value, index) {
+jQuery("#value").effect("highlight",{});
 });
       EOS
   end
@@ -268,10 +268,10 @@ $("#value").effect("highlight",{});
     @generator.select('p').collect('a') { |para| para.show }
     @generator.select('p').collect { |para| para.hide }
     assert_equal <<-EOS.strip, @generator.to_s
-var a = $("p").collect(function(value, index) {
+var a = jQuery("p").collect(function(value, index) {
 return value.show();
 });
-$("p").collect(function(value, index) {
+jQuery("p").collect(function(value, index) {
 return value.hide();
 });
     EOS
@@ -284,16 +284,16 @@ return value.hide();
     @generator.select('p').grep 'a', /^a/ do |value|
       @generator << '(value.className == "welcome")'
     end
-    @generator.select('p').grep 'b', /b$/ do |value, index|
+    @generator.select('p').grep 'b', /bjQuery/ do |value, index|
       @generator.call 'alert', value
       @generator << '(value.className == "welcome")'
     end
 
     assert_equal <<-EOS.strip, @generator.to_s
-var a = $("p").grep(/^a/, function(value, index) {
+var a = jQuery("p").grep(/^a/, function(value, index) {
 return (value.className == "welcome");
 });
-var b = $("p").grep(/b$/, function(value, index) {
+var b = jQuery("p").grep(/bjQuery/, function(value, index) {
 alert(value);
 return (value.className == "welcome");
 });
@@ -312,10 +312,10 @@ return (value.className == "welcome");
     end
 
     assert_equal <<-EOS.strip, @generator.to_s
-var a = $("p").inject([], function(memo, value, index) {
+var a = jQuery("p").inject([], function(memo, value, index) {
 return (value.className == "welcome");
 });
-var b = $("p").inject(null, function(memo, value, index) {
+var b = jQuery("p").inject(null, function(memo, value, index) {
 alert(memo);
 return (value.className == "welcome");
 });
@@ -324,7 +324,7 @@ return (value.className == "welcome");
 
   def test_collection_proxy_with_pluck
     js = generate_js(%Q{ page.select('p').pluck('a', 'className') })
-    assert_equal %(var a = $("p").pluck("className");), js
+    assert_equal %(var a = jQuery("p").pluck("className");), js
   end
 
   def test_collection_proxy_with_zip
@@ -351,7 +351,7 @@ return array.reverse();
     end
 
     assert_equal <<-EOS.strip, @generator.to_s
-var a = $("p").findAll(function(value, index) {
+var a = jQuery("p").findAll(function(value, index) {
 return (value.className == "welcome");
 });
     EOS
@@ -363,8 +363,8 @@ return (value.className == "welcome");
     @generator.select('p').in_groups_of('a', 3)
     @generator.select('p').in_groups_of('a', 3, 'x')
     assert_equal <<-EOS.strip, @generator.to_s
-var a = $("p").inGroupsOf(3);
-var a = $("p").inGroupsOf(3, "x");
+var a = jQuery("p").inGroupsOf(3);
+var a = jQuery("p").inGroupsOf(3, "x");
     EOS
   end
 
@@ -377,8 +377,8 @@ var a = $("p").inGroupsOf(3, "x");
     end
 
     assert_equal <<-EOS.strip, @generator.to_s
-var a = $("p").eachSlice(3);
-var a = $("p").eachSlice(3, function(value, index) {
+var a = jQuery("p").eachSlice(3);
+var a = jQuery("p").eachSlice(3, function(value, index) {
 return value.reverse();
 });
     EOS
@@ -387,7 +387,7 @@ return value.reverse();
   #def test_debug_rjs
     #ActionView::Base.debug_rjs = true
     #@generator['welcome'].replace_html 'Welcome'
-    #assert_equal "try {\n$(\"#welcome\").html(\"Welcome\");\n} catch (e) { alert('RJS error:\\n\\n' + e.toString()); alert('$(\\\"#welcome\\\").html(\\\"Welcome\\\");'); throw e }", @generator.to_s
+    #assert_equal "try {\njQuery(\"#welcome\").html(\"Welcome\");\n} catch (e) { alert('RJS error:\\n\\n' + e.toString()); alert('jQuery(\\\"#welcome\\\").html(\\\"Welcome\\\");'); throw e }", @generator.to_s
   #ensure
     #ActionView::Base.debug_rjs = false
   #end
@@ -417,7 +417,7 @@ return value.reverse();
     @generator.call(:my_method_with_arguments, true, "hello") do |p|
       p[:three].visual_effect(:highlight)
     end
-    assert_equal "before();\nmy_method(function() { $(\"#one\").show();\n$(\"#two\").hide(); });\nin_between();\nmy_method_with_arguments(true, \"hello\", function() { $(\"#three\").visualEffect(\"highlight\"); });", @generator.to_s
+    assert_equal "before();\nmy_method(function() { jQuery(\"#one\").show();\njQuery(\"#two\").hide(); });\nin_between();\nmy_method_with_arguments(true, \"hello\", function() { jQuery(\"#three\").visualEffect(\"highlight\"); });", @generator.to_s
   end
 
   def test_class_proxy_call_with_block
@@ -427,6 +427,6 @@ return value.reverse();
       p[:one].show
       p[:two].hide
     end
-    assert_equal "MyObject.myMethod(function() { $(\"#one\").show();\n$(\"#two\").hide(); });", @generator.to_s
+    assert_equal "MyObject.myMethod(function() { jQuery(\"#one\").show();\njQuery(\"#two\").hide(); });", @generator.to_s
   end
 end
