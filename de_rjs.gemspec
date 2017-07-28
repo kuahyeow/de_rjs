@@ -2,7 +2,7 @@ Gem::Specification.new do |spec|
   spec.name     = 'de_rjs'
   spec.version  = '0.2.1'
   spec.summary  = 'de-RJS your application'
-  spec.homepage = 'http://github.com/kuahyeow/jquery-rjs'
+  spec.homepage = 'http://github.com/kuahyeow/de_rjs'
   spec.author   = 'Thong Kuah'
   spec.email    = 'kuahyeow@gmail.com'
 
