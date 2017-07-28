@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
 
   spec.files = %w(README Rakefile Gemfile) + Dir['lib/**/*', 'vendor/**/*', 'test/**/*']
 
-  spec.add_dependency('rails', '>= 3.2')
+  spec.add_dependency('rails', '>= 4.2', '< 5.1')
   spec.add_dependency('parser')
-  spec.add_runtime_dependency('jquery-rails')
   spec.add_development_dependency('byebug')
 end

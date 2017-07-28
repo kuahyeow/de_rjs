@@ -3,16 +3,15 @@ $:.unshift(lib) unless $:.include?('lib') || $:.include?(lib)
 
 $:.unshift(File.dirname(__FILE__) + '/lib')
 
-require 'bundler'
-Bundler.setup
-Bundler.require
-
+require 'rubygems'
+require 'bundler/setup'
 require "minitest/autorun"
 require 'active_support'
 require 'action_controller'
 require 'action_view'
 require 'action_view/testing/resolvers'
 
+require 'jquery_rjs'
 require 'rewriter/rewrite_rjs'
 
 FIXTURE_LOAD_PATH = File.join(File.dirname(__FILE__), 'fixtures')
@@ -53,11 +52,11 @@ module ActiveSupport
     # have been loaded.
     setup_once do
       SharedTestRoutes.draw do
-        match ':controller(/:action)', :via => :all
+        get ':controller(/:action)', :via => :all
       end
 
       ActionDispatch::IntegrationTest.app.routes.draw do
-        match ':controller(/:action)', :via => :all
+        get ':controller(/:action)', :via => :all
       end
     end
   end

@@ -105,23 +105,23 @@ class JavaScriptGeneratorTest < JqueryHelperBaseTest
   def _evaluate_assigns_and_ivars() end
 
   def test_insert_html_with_string
-    assert_equal '$("#element").prepend("\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");',
+    assert_equal '$("#element").prepend("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");',
       generate_js(%Q{ page.insert_html(:top, 'element', '<p>This is a test</p>') })
-    assert_equal '$("#element").append("\\u003Cp\u003EThis is a test\\u003C/p\u003E");',
+    assert_equal '$("#element").append("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
       generate_js(%Q{ page.insert_html(:bottom, 'element', '<p>This is a test</p>') })
-    assert_equal '$("#element").before("\\u003Cp\u003EThis is a test\\u003C/p\u003E");',
+    assert_equal '$("#element").before("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
       generate_js(%Q{ page.insert_html(:before, 'element', '<p>This is a test</p>') })
-    assert_equal '$("#element").after("\\u003Cp\u003EThis is a test\\u003C/p\u003E");',
+    assert_equal '$("#element").after("\\u003cp\u003eThis is a test\\u003c/p\u003e");',
       generate_js(%Q{ page.insert_html(:after, 'element', '<p>This is a test</p>') })
   end
 
   def test_replace_html_with_string
-    assert_equal '$("#element").html("\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");',
+    assert_equal '$("#element").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");',
       generate_js(%Q{ page.replace_html('element', '<p>This is a test</p>') })
   end
 
   def test_replace_element_with_string
-    assert_equal '$("#element").replaceWith("\\u003Cdiv id=\"element\"\\u003E\\u003Cp\\u003EThis is a test\\u003C/p\\u003E\\u003C/div\\u003E");',
+    assert_equal '$("#element").replaceWith("\\u003cdiv id=\"element\"\\u003e\\u003cp\\u003eThis is a test\\u003c/p\\u003e\\u003c/div\\u003e");',
       generate_js(%Q{ page.replace('element', '<div id="element"><p>This is a test</p></div>') })
   end
 
@@ -202,10 +202,10 @@ class JavaScriptGeneratorTest < JqueryHelperBaseTest
     @generator.replace_html('baz', '<p>This is a test</p>')
 
     assert_equal <<-EOS.chomp, @generator.to_s
-$("#element").prepend("\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
-$("#element").append("\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
+$("#element").prepend("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
+$("#element").append("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
 $("#foo,#bar").remove();
-$("#baz").html("\\u003Cp\\u003EThis is a test\\u003C/p\\u003E");
+$("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
     EOS
   end
 
@@ -456,6 +456,8 @@ return value.reverse();
   #end
 
   def test_literal
+    not_supported
+
     literal = @generator.literal("function() {}")
     assert_equal "function() {}", ActiveSupport::JSON.encode(literal)
     assert_equal "", @generator.to_s
