@@ -524,7 +524,7 @@ module DeRjs
       end
 
       def record(line)
-        line = "#{line.to_s.chomp.gsub(/\;\z/, '')};".html_safe
+        line = "#{line.to_s.chomp.gsub(/\;\z/, '')};"
         self << line
         line
       end
@@ -575,7 +575,7 @@ module DeRjs
 
     def initialize(generator, root = nil)
       @generator = generator
-      @generator << root.html_safe if root
+      @generator << root if root
     end
 
     def is_a?(klass)
@@ -616,9 +616,9 @@ module DeRjs
       #id = id.to_s.count('#.*,>+~:[/ ') == 0 ? "##{id}" : id
       @id = id
       if id =~ /\A#?<%=.*%>\z/  # if completely using erb
-        super(generator, "#{::JQUERY_VAR}(\"#{id}\");".html_safe)  # USER BEWARE !
+        super(generator, "#{::JQUERY_VAR}(\"#{id}\");")  # USER BEWARE !
       else
-        super(generator, "#{::JQUERY_VAR}(#{::ActiveSupport::JSON.encode(id)});".html_safe)
+        super(generator, "#{::JQUERY_VAR}(#{::ActiveSupport::JSON.encode(id)});")
       end
     end
 
