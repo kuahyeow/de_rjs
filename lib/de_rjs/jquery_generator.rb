@@ -566,10 +566,6 @@ module DeRjs
         generator = self.class.new(@context, &block)
         literal("function() { #{generator.to_s} }")
       end
-
-      def method_missing(method, *arguments)
-        JavaScriptProxy.new(self, method.to_s.camelize)
-      end
     end
   end
 

@@ -220,6 +220,8 @@ jQuery("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
   end
 
   def test_sortable
+    not_supported
+
     assert_equal %(Sortable.create("blah", {onUpdate:function(){new Ajax.Request('http://www.example.com/order', {asynchronous:true, evalScripts:true, parameters:Sortable.serialize("blah")})}});),
       @generator.sortable('blah', :url => { :action => "order" })
     assert_equal %(Sortable.create("blah", {onUpdate:function(){new Ajax.Request('http://www.example.com/order', {asynchronous:false, evalScripts:true, parameters:Sortable.serialize("blah")})}});),
@@ -227,11 +229,15 @@ jQuery("#baz").html("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");
   end
 
   def test_draggable
+    not_supported
+
     assert_equal %(new Draggable("blah", {});),
       @generator.draggable('blah')
   end
 
   def test_drop_receiving
+    not_supported
+
     assert_equal %(Droppables.add("blah", {onDrop:function(element){new Ajax.Request('http://www.example.com/order', {asynchronous:true, evalScripts:true, parameters:'id=' + encodeURIComponent(element.id)})}});),
       @generator.drop_receiving('blah', :url => { :action => "order" })
     assert_equal %(Droppables.add("blah", {onDrop:function(element){new Ajax.Request('http://www.example.com/order', {asynchronous:false, evalScripts:true, parameters:'id=' + encodeURIComponent(element.id)})}});),
@@ -407,6 +413,8 @@ return value.reverse();
   end
 
   def test_class_proxy
+    not_supported
+
     @generator.form.focus('my_field')
     assert_equal "Form.focus(\"my_field\");", @generator.to_s
   end
