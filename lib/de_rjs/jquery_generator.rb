@@ -596,7 +596,7 @@ module DeRjs
     end
 
     def known_jquery_methods
-      %w(hide show first last)
+      %w(hide show first last remove focus)
     end
 
     def warn(method, *arguments)
@@ -660,6 +660,10 @@ module DeRjs
 
     def visual_effect(name, options = {})
       append_to_function_chain!(@generator.send(:jquery_ui_effect, name, options))
+    end
+
+    def add_class_name(class_name)
+      call 'addClass', class_name
     end
 
     def reload(options_for_replace = {})
