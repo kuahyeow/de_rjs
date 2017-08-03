@@ -785,7 +785,7 @@ module DeRjs
 
   class JavaScriptElementCollectionProxy < JavaScriptCollectionProxy #:nodoc:\
     def initialize(generator, pattern)
-      super(generator, "#{::JQUERY_VAR}(#{::ActiveSupport::JSON.encode(pattern)})")
+      super(generator, "#{::JQUERY_VAR}(#{::ActiveSupport::JSON.encode(pattern)});")
     end
   end
 end
