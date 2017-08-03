@@ -580,13 +580,28 @@ module DeRjs
       klass == JavaScriptProxy
     end
 
+    def ==(other)
+      raise "haha"
+    end
+
     private
     def method_missing(method, *arguments, &block)
       if method.to_s =~ /(.*)=$/
+        warn(method.to_s, *arguments)
         assign($1, arguments.first)
       else
+        warn(method.to_s, *arguments)
         call("#{method.to_s.camelize(:lower)}", *arguments, &block)
       end
+    end
+
+    def known_jquery_methods
+      %w(hide show first last)
+    end
+
+    def warn(method, *arguments)
+      return if known_jquery_methods.include? method.to_s
+      ::Kernel.puts "#{method} is called via method_missing with args: #{arguments.inspect} at: #{::Kernel.caller.join("\n")}"
     end
 
     def call(function, *arguments, &block)
