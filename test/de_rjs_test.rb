@@ -55,9 +55,19 @@ class DeRjsTest < DeRjsBaseTest
       generate_js(%Q{ page.insert_html(:top, 'element', :partial => "post", :locals => {:ab => "cd"}) })
   end
 
+  def test_insert_html_with_var
+    assert_equal 'jQuery("#element").prepend("<%= escape_javascript(@var) %>");',
+      generate_js(%Q{ page.insert_html(:top, 'element', @var) })
+  end
+
   def test_replace_html_with_hash
     assert_equal 'jQuery("#element").html("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
       generate_js(%Q{ page.replace_html('element', :partial => "post", :locals => {:ab => "cd"}) })
+  end
+
+  def test_replace_html_with_var
+    assert_equal 'jQuery("#element").html("<%= escape_javascript(@var) %>");',
+      generate_js(%Q{ page.replace_html('element', @var) })
   end
 
   def test_replace_element_with_hash

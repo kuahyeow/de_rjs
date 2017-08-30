@@ -96,10 +96,17 @@ module DeRjs
         array[0..1] == [nil, :dom_id] #&& array.size == 3
       end
 
+      # if Hash, render
+      # else assume it's a string
       def rewrite_options_for_render(arg_nodes)
         return if arg_nodes.size == 1 && arg_nodes.first.type == :str
-        insert_before arg_nodes.first.loc.expression, "%q{<%= escape_javascript(render("
-        insert_after  arg_nodes.last.loc.expression, ")) %>}"
+        if arg_nodes.first.type == :hash
+          insert_before arg_nodes.first.loc.expression, "%q{<%= escape_javascript(render("
+          insert_after  arg_nodes.last.loc.expression, ")) %>}"
+        else
+          insert_before arg_nodes.first.loc.expression, "%q{<%= escape_javascript("
+          insert_after  arg_nodes.last.loc.expression, ") %>}"
+        end
       end
 
       def rewrite_url_for(url_arg)
