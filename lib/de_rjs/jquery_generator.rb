@@ -555,7 +555,7 @@ module DeRjs
       end
 
       def javascript_object_for(object)
-        if object.is_a?(String) && object =~ /\A<%=.*%>\z/  # if completely using e
+        if object.is_a?(String) && object =~ /\A<%=.*%>\z/m  # if completely using erb
           "\"#{object}\""
         else
           ::ActiveSupport::JSON.encode(object)

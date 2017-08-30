@@ -50,6 +50,15 @@ class DeRjsTest < DeRjsBaseTest
       generate_js(%q{ page.replace('element', '<div id="element"><p>This is a test</p></div>') })
   end
 
+  def test_replace_html_with_new_line
+    lines = <<-'END'
+page.replace_html("element_#{@element.id}", :partial => "show",
+  :locals => {:a => [@a], :b => false})
+END
+    assert_equal 'jQuery("#<%= "element_#{@element.id}" %>").html("<%= escape_javascript(render(:partial => "show",' + "\n" + '  :locals => {:a => [@a], :b => false})) %>");',
+      generate_js(lines)
+  end
+
   def test_insert_html_with_hash
     assert_equal 'jQuery("#element").prepend("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
       generate_js(%q{ page.insert_html(:top, 'element', :partial => "post", :locals => {:ab => "cd"}) })
