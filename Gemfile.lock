@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    de_rjs (0.4.2)
+    de_rjs (0.4.3)
       parser (>= 2.3.1.2, < 2.5)
       rails (>= 4.2, < 5.1)
 
@@ -103,7 +103,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    thor (0.19.4)
+    thor (0.20.0)
     thread_safe (0.3.6)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
