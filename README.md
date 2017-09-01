@@ -6,11 +6,11 @@ Converts your .rjs code into js.erb compliant code
 
 ## dom_id_or_string
 
-page[@record], where @record is a ActiveRecord object
-would translate to $("<%= dom_id(@record)") perfectly fine.
+`page[@record]`, where `@record` is a ActiveRecord object
+would translate to `$("<%= dom_id(@record)")` perfectly fine.
 
-However, if @var computes to a string, such as `@var = "fixed_id"`,
-then `dom_id(@var) will result in an error. Hence for safety, I have decided to
+However, if `@var` computes to a string, such as `@var = "fixed_id"`,
+then `dom_id(@var)` will result in an error. Hence for safety, I have decided to
 transcode `page[@var]` to :
 
 ```
