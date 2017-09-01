@@ -86,7 +86,7 @@ module DeRjs
           insert_before id_arg.loc.expression, "%q{<%= "
           insert_after  id_arg.loc.expression, " %>}"
         else
-          insert_before id_arg.loc.expression, "%q{<%= dom_id("
+          insert_before id_arg.loc.expression, "%q{<%= dom_id_or_string("
           insert_after  id_arg.loc.expression, ") %>}"
         end
       end

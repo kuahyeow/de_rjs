@@ -134,8 +134,8 @@ END
   end
 
   def test_element_access_on_variable
-    assert_equal %(jQuery("#<%= dom_id(@var) %>");), generate_js(%q{ page[@var] })
-    assert_equal %(jQuery("#<%= dom_id(@var) %>").hide();), generate_js(%q{ page[@var].hide })
+    assert_equal %(jQuery("#<%= dom_id_or_string(@var) %>");), generate_js(%q{ page[@var] })
+    assert_equal %(jQuery("#<%= dom_id_or_string(@var) %>").hide();), generate_js(%q{ page[@var].hide })
   end
 
   def test_element_access_on_interpolated_string
@@ -144,15 +144,15 @@ END
   end
 
   def test_element_access_on_records
-    assert_equal %(jQuery("#<%= dom_id(Bunny.new(:id => 5)) %>");), generate_js(%q{ page[Bunny.new(:id => 5)] })
-    assert_equal %(jQuery("#<%= dom_id(Bunny.new) %>");), generate_js(%q{ page[Bunny.new] })
+    assert_equal %(jQuery("#<%= dom_id_or_string(Bunny.new(:id => 5)) %>");), generate_js(%q{ page[Bunny.new(:id => 5)] })
+    assert_equal %(jQuery("#<%= dom_id_or_string(Bunny.new) %>");), generate_js(%q{ page[Bunny.new] })
   end
 
   def test_element_access_on_dom_id
     assert_equal %(jQuery("#<%= dom_id(Bunny.new(:id => 5)) %>");), generate_js(%q{ page[dom_id(Bunny.new(:id => 5))] })
     assert_equal %(jQuery("#<%= dom_id(Bunny.new) %>");), generate_js(%q{ page[dom_id(Bunny.new)] })
 
-    assert_equal %(jQuery("#<%= dom_id(dom_id(Bunny.new) + evil) %>");), generate_js(%q{ page[dom_id(Bunny.new) + evil] })
+    assert_equal %(jQuery("#<%= dom_id_or_string(dom_id(Bunny.new) + evil) %>");), generate_js(%q{ page[dom_id(Bunny.new) + evil] })
   end
 
   def test_element_proxy_one_deep
