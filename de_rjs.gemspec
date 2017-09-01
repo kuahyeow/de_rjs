@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.email    = 'kuahyeow@gmail.com'
   spec.license  = 'MIT'
 
-  spec.files = %w(README Rakefile Gemfile) + Dir['bin/*', 'lib/**/*', 'vendor/**/*', 'test/**/*']
+  spec.files = %w(README.md Rakefile Gemfile) + Dir['bin/*', 'lib/**/*', 'test/**/*']
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
