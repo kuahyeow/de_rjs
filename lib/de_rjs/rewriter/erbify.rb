@@ -4,6 +4,10 @@ module DeRjs
       class MustTranslateManually < StandardError; end
 
       def on_send(node)
+        rewrite_page_calls(node)
+      end
+
+      def rewrite_page_calls(node)
         receiver_node, method_name, *arg_nodes = *node
 
         if receiver_node.to_a.last == :page
@@ -17,6 +21,9 @@ module DeRjs
           when :redirect_to
             rewrite_redirect_to(receiver_node, method_name, *arg_nodes)
 
+          when :visual_effect
+            rewrite_visual_effect(receiver_node, method_name, *arg_nodes)
+
           when :[]
             rewrite_square_bracket(receiver_node, method_name, *arg_nodes)
 
@@ -29,7 +36,6 @@ module DeRjs
             # page.replace
             # page.select
             # page.show
-            # page.visual_effect
             rewrite_all_args(receiver_node, method_name, *arg_nodes)
           end
         end
@@ -39,6 +45,12 @@ module DeRjs
           rewrite_square_bracket(*receiver_node.to_a)
           rewrite_square_replace(receiver_node, method_name, *arg_nodes) if [:replace, :replace_html].include?(method_name)
         end
+      end
+
+      protected
+      # name, id=nil, options
+      def rewrite_visual_effect(receiver_node, method_name, *arg_nodes)
+        rewrite_to_erb_unless_static(arg_nodes[1]) if arg_nodes[1]
       end
 
       def rewrite_all_args(receiver_node, method_name, *arg_nodes)
@@ -73,7 +85,6 @@ module DeRjs
         rewrite_options_for_render(arg_nodes)
       end
 
-      protected
       def rewrite_to_erb_unless_static(id_arg)
         return if [:str, :sym].include?(id_arg.type)
         insert_before id_arg.loc.expression, "%q{<%= "

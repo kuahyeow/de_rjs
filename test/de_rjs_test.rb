@@ -206,6 +206,14 @@ END
       generate_js(%q{ page.visual_effect(:toggle_appear,"blah" + blah.id) })
   end
 
+  def test_visial_effect_with_options
+    assert_equal %(jQuery(\"#blah\").effect(\"highlight\",{endcolor:'#eeeeee', startcolor:'#ffffaa'});),
+      generate_js(%q{ page['blah'].visual_effect(:highlight, :startcolor => "#ffffaa", :endcolor => "#eeeeee") })
+
+    assert_equal %(jQuery(\"#blah\").effect(\"highlight\",{endcolor:'#eeeeee', startcolor:'#ffffaa'});),
+      generate_js(%q{ page.visual_effect(:highlight, 'blah', :startcolor => "#ffffaa", :endcolor => "#eeeeee") })
+  end
+
   def test_collection_first_and_last
     js = generate_js(%q{
     page.select('p.welcome b').first.hide()
