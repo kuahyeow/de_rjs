@@ -84,6 +84,10 @@ END
       generate_js(%q{ page.replace('element', :partial => "post", :locals => {:ab => "cd"}) })
   end
 
+  def test_square_element_replace_with_hash
+    assert_equal 'jQuery("#element").replaceWith("<%= escape_javascript(render(:partial => "post", :locals => {:ab => "cd"})) %>");',
+      generate_js(%q{ page['element'].replace(:partial => "post", :locals => {:ab => "cd"}) })
+  end
 
   def test_remove
     assert_equal 'jQuery("#foo").remove();',
