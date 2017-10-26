@@ -29,6 +29,13 @@ class DeRjsTest < DeRjsBaseTest
 
   def _evaluate_assigns_and_ivars() end
 
+  def test_concat_operator
+    assert_equal "javascriptMethodCall()",
+      generate_js(%q{ page << "javascriptMethodCall()"})
+    assert_equal "javascriptMethodCall('<%= var %>')",
+      generate_js(%q{ page << "javascriptMethodCall('#{var}')"})
+  end
+
   def test_insert_html_with_string
     assert_equal 'jQuery("#element").prepend("\\u003cp\\u003eThis is a test\\u003c/p\\u003e");',
       generate_js(%q{ page.insert_html(:top, 'element', '<p>This is a test</p>') })

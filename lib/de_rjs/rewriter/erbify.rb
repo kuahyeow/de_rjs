@@ -27,6 +27,9 @@ module DeRjs
           when :[]
             rewrite_square_bracket(receiver_node, method_name, *arg_nodes)
 
+          when :<<
+            rewrite_concat(receiver_node, method_name, *arg_nodes)
+
           else
             # All others such as :
             # page.alert
@@ -68,6 +71,21 @@ module DeRjs
         rewrite_to_erb_unless_static(arg_nodes.shift)
         rewrite_to_erb_unless_static(arg_nodes.shift)
         rewrite_options_for_render(arg_nodes)
+      end
+
+      def rewrite_concat(receiver_node, method_name, *arg_nodes)
+        javascript_string = arg_nodes.first
+        case javascript_string.type
+        when :str, :sym
+          return
+        when :dstr
+          javascript_string.children.each do |child|
+            next if child.type == :str
+            replace child.loc.expression, child.loc.expression.source.sub('#{', '<%= ').sub('}', ' %>')
+          end
+        else
+          raise "Unsupported type for conversion #{javascript_string.type} - Source: #{javascript_string.loc.expression.source}"
+        end
       end
 
       # location (string, or url_for compatible options)
